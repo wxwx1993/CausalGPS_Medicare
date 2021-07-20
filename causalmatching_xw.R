@@ -7,14 +7,14 @@ require(CausalGPS)
 library("gnm")
 
 load("/nfs/home/X/xwu/shared_space/ci3_analysis/pdez_measurementerror/National_Causal-master/balance_qd/covariates_qd.RData")
-covariates_qd$year<-as.factor(covariates_qd$year)
-covariates_qd$region<-as.factor(covariates_qd$region)
+covariates_qd$year <- as.factor(covariates_qd$year)
+covariates_qd$region <- as.factor(covariates_qd$region)
 a.vals <- seq(min(covariates_qd$pm25_ensemble), max(covariates_qd$pm25_ensemble), length.out = 50)
 delta_n <- (a.vals[2] - a.vals[1])
 
-match_pop_all <- generate_pseudo_pop(Y=covariates_qd$zip,
-                                     w=covariates_qd$pm25_ensemble,
-                                     c=covariates_qd[, c(4:19)],
+match_pop_all <- generate_pseudo_pop(Y = covariates_qd$zip,
+                                     w = covariates_qd$pm25_ensemble,
+                                     c = covariates_qd[, c(4:19)],
                                      ci_appr = "matching",
                                      pred_model = "sl",
                                      gps_model = "parametric",
@@ -33,20 +33,22 @@ match_pop_all <- generate_pseudo_pop(Y=covariates_qd$zip,
                                      scale = 1.0)
 match_pop_data <- match_pop_all$pseudo_pop
 covariates_qd_trim <- subset(covariates_qd,
-                            pm25_ensemble < quantile(covariates_qd$pm25_ensemble,0.95)&
-                            pm25_ensemble > quantile(covariates_qd$pm25_ensemble,0.05))
-match_pop_data <- cbind(match_pop_data, covariates_qd_trim[,1:2])
+                             pm25_ensemble < quantile(covariates_qd$pm25_ensemble,0.95)&
+                             pm25_ensemble > quantile(covariates_qd$pm25_ensemble,0.05))
+match_pop_data <- cbind(match_pop_data, covariates_qd_trim[, 1:2])
 
 dir_data = '/nfs/home/X/xwu/shared_space/ci3_analysis/pdez_measurementerror/National_Causal-master/'
 dir_out = '/nfs/home/X/xwu/shared_space/ci3_analysis/pdez_measurementerror/National_Causal-master/'
-load(paste0(dir_data,"aggregate_data_qd.RData"))
-aggregate_data_qd$year<-as.factor(aggregate_data_qd$year)
-aggregate_data_qd$region<-as.factor(aggregate_data_qd$region)
-aggregate_data_qd2 <- merge(aggregate_data_qd, match_pop_data[, c("year", "zip", "counter")], by = c("year", "zip"), all.x =TRUE)
+load(paste0(dir_data, "aggregate_data_qd.RData"))
+aggregate_data_qd$year <- as.factor(aggregate_data_qd$year)
+aggregate_data_qd$region <- as.factor(aggregate_data_qd$region)
+aggregate_data_qd2 <- merge(aggregate_data_qd, match_pop_data[, c("year", "zip", "counter")], by = c("year", "zip"), all.x = TRUE)
 
-matchingqd_gnm<-summary(gnm(dead~ pm25_ensemble + offset(log(time_count)), 
-                            eliminate=(as.factor(sex):as.factor(race):as.factor(dual):as.factor(entry_age_break):as.factor(followup_year)),
-                            data=aggregate_data_qd2, family=poisson(link="log"), weights=counter))
+matchingqd_gnm <- summary(gnm(dead ~ pm25_ensemble + offset(log(time_count)), 
+                              eliminate = (as.factor(sex):as.factor(race):as.factor(dual):as.factor(entry_age_break):as.factor(followup_year)),
+                              data = aggregate_data_qd2,
+                              family = poisson(link = "log"),
+                              weights = counter))
 exp(10*matchingqd_gnm$coefficients[1])
 #> exp(10*matchingqd_gnm$coefficients[1])
 #[1] 1.104566
