@@ -42,7 +42,7 @@ dir_out = '/nfs/home/X/xwu/shared_space/ci3_analysis/pdez_measurementerror/Natio
 load(paste0(dir_data, "aggregate_data_qd.RData"))
 aggregate_data_qd$year <- as.factor(aggregate_data_qd$year)
 aggregate_data_qd$region <- as.factor(aggregate_data_qd$region)
-aggregate_data_qd2 <- merge(aggregate_data_qd, match_pop_data[, c("year", "zip", "counter")], by = c("year", "zip"), all.x = TRUE)
+aggregate_data_qd2 <- merge(aggregate_data_qd, match_pop_data[, c("year", "zip", "counter")], by = c("year", "zip"), all.y = TRUE)
 
 matchingqd_gnm <- summary(gnm(dead ~ pm25_ensemble + offset(log(time_count)), 
                               eliminate = (as.factor(sex):as.factor(race):as.factor(dual):as.factor(entry_age_break):as.factor(followup_year)),
@@ -50,5 +50,3 @@ matchingqd_gnm <- summary(gnm(dead ~ pm25_ensemble + offset(log(time_count)),
                               family = poisson(link = "log"),
                               weights = counter))
 exp(10*matchingqd_gnm$coefficients[1])
-#> exp(10*matchingqd_gnm$coefficients[1])
-#[1] 1.104566
