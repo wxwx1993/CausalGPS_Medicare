@@ -68,9 +68,6 @@ source(paste0(output, "application_function.R"))
 prematch_data$treat <- prematch_data$pm25_ensemble
 
 #saveRDS(match_data,file= "/nfs/home/X/xwu/shared_space/ci3_nsaph/XiaoWu/GPSmatching_data/match_data.rds")
-match_data <- subset(match_data,
-                     treat <= quantile(prematch_data$pm25_ensemble, 0.99)&
-                     treat >= quantile(prematch_data$pm25_ensemble, 0.01))
 a.vals <- seq(min(prematch_data$treat), max(prematch_data$treat), length.out=100)
 #a.vals <- subset(a.vals,
 #                 a.vals <= quantile(prematch_data$pm25_ensemble, 0.99),
