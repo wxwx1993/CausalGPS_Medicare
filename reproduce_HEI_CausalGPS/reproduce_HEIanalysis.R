@@ -95,9 +95,10 @@ plot(a.vals[trimed_index], erf_notrim$erf[trimed_index]/erf_notrim$erf[trimed_in
 
 # After the development of CausalGPS, we recommend 
 # the following implementation is advantegious
+# Caveat: this recommendation only applies to a stable version of CausalGPS 
 match_pop_all_noncompile <- generate_pseudo_pop(Y = Y,
                                                 w = treat,
-                                                c = c2,
+                                                c = c,
                                                 ci_appr = "matching",
                                                 pred_model = "sl",
                                                 gps_model = "parametric",
