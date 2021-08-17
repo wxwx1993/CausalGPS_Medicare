@@ -49,9 +49,9 @@ q1 <- quantile(prematch_data$pm25_ensemble, 0.01)
 q2 <- quantile(prematch_data$pm25_ensemble, 0.99)
 trimed_index <- which(a.vals >= q1 & a.vals <= q2)
 
-# This implementation reproduces analyses in HEI reports)
-# it is different than the default setting in the following way:
-# 1. it uses a numeric matrix as the input of Xgboost model
+# The following implementation reproduces analyses in HEI reports:
+# It is different than the default R package setting in the following way:
+# 1. it uses a numeric matrix as the input of Xgboost model, rather than one-hot encoding
 # 2. it matches on the levels of a.vals
 # 3. it fits a kernel smoother on untrimmed matched set and trims the ERC
 
