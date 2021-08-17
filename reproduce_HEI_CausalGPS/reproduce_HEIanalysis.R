@@ -96,9 +96,10 @@ plot(a.vals[trimed_index], erf_notrim$erf[trimed_index]/erf_notrim$erf[trimed_in
 # After the development of CausalGPS, we recommend 
 # the following implementation is advantegious
 # Caveat: this recommendation only applies to a stable version of CausalGPS 
+# If users prefer a numerical transformation of categorical variables in the GPS model
 match_pop_all_noncompile <- generate_pseudo_pop(Y = Y,
                                                 w = treat,
-                                                c = c,
+                                                c = c2,
                                                 ci_appr = "matching",
                                                 pred_model = "sl",
                                                 gps_model = "parametric",
@@ -128,3 +129,38 @@ plot(erf_trim)
 
 plot(erf_trim$erf[trimed_index])
 plot(a.vals[trimed_index], erf_trim$erf[trimed_index]/erf_trim$erf[trimed_index][1])
+
+# If users prefer a one-hot encoding of categorical variables in the GPS model
+match_pop_all_noncompile_onehot <- generate_pseudo_pop(Y = Y,
+                                                       w = treat,
+                                                       c = c,
+                                                ci_appr = "matching",
+                                                pred_model = "sl",
+                                                gps_model = "parametric",
+                                                use_cov_transform = FALSE,
+                                                sl_lib = c("m_xgboost"),
+                                                params = list("xgb_nrounds" = 50,
+                                                              "xgb_max_depth" = 6,
+                                                              "xgb_eta" = 0.3,
+                                                              "xgb_min_child_weight" = 1),
+                                                nthread = 8, # number of cores, you can change,
+                                                covar_bl_method = "absolute",
+                                                covar_bl_trs = 0.5,
+                                                trim_quantiles = c(0.01,0.99), # trimed, you can change
+                                                optimized_compile = FALSE, #created a column counter for how many times matched,
+                                                max_attempt = 1,
+                                                matching_fun = "matching_l1",
+                                                delta_n = delta_n, # you can change this to the one you used in previous analysis,
+                                                scale = 1.0)
+match_pop_data_trim_onehot <- match_pop_all_noncompile_onehot$pseudo_pop
+
+erf_trim_onehot <- estimate_npmetric_erf(matched_Y = match_pop_data_trim_onehot$Y,
+                                         matched_w = match_pop_data_trim_onehot$w,
+                                         bw_seq = seq(8*delta_n, 40*delta_n, 2*delta_n),
+                                         w_vals = a.vals,
+                                         nthread = 10)
+plot(erf_trim_onehot)
+
+plot(erf_trim_onehot$erf[trimed_index])
+plot(a.vals[trimed_index], erf_trim_onehot$erf[trimed_index]/erf_trim_onehot$erf[trimed_index][1])
+
