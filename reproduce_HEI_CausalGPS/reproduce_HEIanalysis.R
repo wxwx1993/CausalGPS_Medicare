@@ -97,7 +97,7 @@ plot(a.vals[trimed_index], erf_notrim$erf[trimed_index]/erf_notrim$erf[trimed_in
 # the following implementation
 match_pop_all_noncompile <- generate_pseudo_pop(Y = Y,
                                                 w = treat,
-                                                c = c,
+                                                c = c2,
                                                 ci_appr = "matching",
                                                 pred_model = "sl",
                                                 gps_model = "parametric",
