@@ -95,7 +95,7 @@ plot(a.vals[trimed_index], erf_notrim$erf[trimed_index]/erf_notrim$erf[trimed_in
 
 # In CausalGPS, the following default implementation was used.
 # The default implementation of CausalGPS directly fit a Kernel smoother on trimmed matched set, 
-# this is ideal in causal inference (fit outcome models on a balanced dataset). 
+# this is advantageious in causal inference (fit outcome models on a balanced dataset). 
 # But it creates boundary bias in Kernel smoothing (unless we trim the ERC further). 
 # This likely created the unstable performance at tails of ERCs (unless users further trim the boundary).
 # If users prefer a numerical transformation of categorical variables in the GPS model
