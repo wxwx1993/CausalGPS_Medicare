@@ -93,9 +93,11 @@ plot(erf_notrim)
 plot(erf_notrim$erf[trimed_index])
 plot(a.vals[trimed_index], erf_notrim$erf[trimed_index]/erf_notrim$erf[trimed_index][1])
 
-# After the development of CausalGPS, we recommend 
-# the following implementation is advantegious
-# Caveat: this recommendation only applies to a stable version of CausalGPS 
+# In CausalGPS, the following default implementation was used.
+# The default implementation of CausalGPS directly fit a Kernel smoother on trimmed matched set, 
+# this is ideal in causal inference (fit outcome models on a balanced dataset). 
+# But it creates boundary bias in Kernel smoothing (unless we trim the ERC further). 
+# This likely created the unstable performance at tails of ERCs (unless users further trim the boundary).
 # If users prefer a numerical transformation of categorical variables in the GPS model
 match_pop_all_noncompile <- generate_pseudo_pop(Y = Y,
                                                 w = treat,
