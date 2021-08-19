@@ -3,7 +3,7 @@
 
 library(devtools)
 try(detach("package:CausalGPS", unload = TRUE), silent = TRUE)
-install_github("fasrc/CausalGPS", ref="af7a58f2d8b8715b515b0554082d8781ff0323dd")
+install_github("fasrc/CausalGPS", ref="develop")
 
 library("CausalGPS")
 library("dplyr")
