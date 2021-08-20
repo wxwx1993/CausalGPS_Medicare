@@ -58,6 +58,9 @@ trimed_index <- which(a.vals >= q1 & a.vals <= q2)
 # numeric matrix of covariates (matched the previous implementation that directly calls xgboost)
 c2 = as.data.frame(data.matrix(c))
 
+save(Y, treat, c, c2, q1, q2, trimed_index, delta_n, a.vals, file = "./prematch.RData")
+load("./prematch.RData")
+
 match_pop_all_noncompile_notrim <- generate_pseudo_pop(Y = Y,
                                                        w = treat,
                                                        c = c2,
